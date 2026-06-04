@@ -1,0 +1,47 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../**/*.vue";
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --color-hc-primary: #0d9488;
+    --color-hc-sidebar: #0f172a;
+    --color-hc-bg: #f8fafc;
+    --color-hc-card: #ffffff;
+    --color-hc-border: #e2e8f0;
+    --color-hc-text: #0f172a;
+    --color-hc-muted: #64748b;
+    --color-status-pending: #f59e0b;
+    --color-status-processing: #2563eb;
+    --color-status-completed: #16a34a;
+    --color-status-cancelled: #dc2626;
+}
+
+@layer base {
+    body {
+        @apply bg-hc-bg text-hc-text antialiased;
+    }
+}
+
+@layer components {
+    .hc-card {
+        @apply rounded-xl border border-hc-border bg-hc-card shadow-sm;
+    }
+
+    .hc-button-primary {
+        @apply rounded-md bg-hc-primary px-4 py-2 font-medium text-white transition hover:brightness-95;
+    }
+
+    .hc-page-title {
+        @apply text-2xl font-semibold text-hc-text;
+    }
+
+    .hc-page-subtitle {
+        @apply mt-1 text-sm text-hc-muted;
+    }
+}

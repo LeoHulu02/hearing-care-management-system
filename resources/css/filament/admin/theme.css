@@ -1,0 +1,9 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+:root {
+    --hc-sidebar: #0f172a;
+}
+
+.fi-sidebar {
+    background-color: var(--hc-sidebar) !important;
+}
