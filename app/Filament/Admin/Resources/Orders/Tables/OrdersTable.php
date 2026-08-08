@@ -20,6 +20,7 @@ class OrdersTable
         return $table
             ->columns([
                 TextColumn::make('order_code')
+                    ->label('Order')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('user.name')
@@ -29,15 +30,21 @@ class OrdersTable
                 TextColumn::make('products')
                     ->label('Products')
                     ->state(fn ($record): string => $record->orderItems->pluck('product.name')->filter()->join(', '))
+                    ->placeholder('No products')
+                    ->limit(48)
                     ->wrap(),
                 TextColumn::make('quantity')
                     ->label('Qty')
+                    ->badge()
+                    ->color('gray')
                     ->state(fn ($record): int => (int) $record->orderItems->sum('quantity')),
                 TextColumn::make('total_price')
+                    ->label('Total')
                     ->money('IDR')
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge()
+                    ->formatStateUsing(fn (string $state): string => str($state)->headline()->toString())
                     ->color(fn (string $state): string => match ($state) {
                         'pending' => 'warning',
                         'processing' => 'info',
@@ -75,6 +82,11 @@ class OrdersTable
                             );
                     }),
             ])
+            ->striped()
+            ->defaultSort('created_at', 'desc')
+            ->emptyStateIcon('heroicon-o-shopping-bag')
+            ->emptyStateHeading('No orders yet')
+            ->emptyStateDescription('Customer orders will appear here once submitted.')
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),

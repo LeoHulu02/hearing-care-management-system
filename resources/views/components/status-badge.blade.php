@@ -15,6 +15,6 @@
     $entry = $map[$status] ?? ['label' => ucfirst(str_replace('_', ' ', $status)), 'class' => 'bg-slate-100 text-slate-700'];
 @endphp
 
-<span {{ $attributes->class("rounded-full px-2.5 py-1 text-xs font-medium {$entry['class']}") }}>
+<span {{ $attributes->class("rounded-full px-2 py-0.5 text-[11px] font-medium {$entry['class']}") }}>
     {{ $entry['label'] }}
 </span>

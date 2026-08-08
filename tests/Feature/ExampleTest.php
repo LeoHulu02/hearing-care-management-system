@@ -180,4 +180,106 @@ class ExampleTest extends TestCase
 
         $this->assertSame(4, $product->fresh()->stock);
     }
+
+    public function test_customer_cannot_open_other_customers_order_detail(): void
+    {
+        $customerA = User::factory()->create([
+            'role' => User::ROLE_CUSTOMER,
+            'phone' => '087777777777',
+        ]);
+
+        $customerB = User::factory()->create([
+            'role' => User::ROLE_CUSTOMER,
+            'phone' => '088888888888',
+        ]);
+
+        $order = Order::create([
+            'user_id' => $customerA->id,
+            'order_code' => 'ORD-2026-0099',
+            'total_price' => 1000000,
+            'status' => Order::STATUS_PENDING,
+        ]);
+
+        $response = $this->actingAs($customerB)->get(route('orders.show', $order));
+
+        $response->assertForbidden();
+    }
+
+    public function test_customer_cannot_create_order_with_zero_quantity(): void
+    {
+        $customer = User::factory()->create([
+            'role' => User::ROLE_CUSTOMER,
+            'phone' => '089999999999',
+        ]);
+
+        $product = Product::create([
+            'name' => 'Zero Qty Product',
+            'image' => null,
+            'price' => 1000000,
+            'stock' => 10,
+            'description' => 'Validation test.',
+        ]);
+
+        $response = $this->from(route('orders.create'))->actingAs($customer)->post(route('orders.store'), [
+            'product_id' => $product->id,
+            'quantity' => 0,
+        ]);
+
+        $response->assertRedirect(route('orders.create'));
+        $response->assertSessionHasErrors('quantity');
+    }
+
+    public function test_customer_cannot_order_when_stock_is_zero(): void
+    {
+        $customer = User::factory()->create([
+            'role' => User::ROLE_CUSTOMER,
+            'phone' => '081010101010',
+        ]);
+
+        $product = Product::create([
+            'name' => 'Out Product',
+            'image' => null,
+            'price' => 1500000,
+            'stock' => 0,
+            'description' => 'Out of stock.',
+        ]);
+
+        $response = $this->from(route('orders.create'))->actingAs($customer)->post(route('orders.store'), [
+            'product_id' => $product->id,
+            'quantity' => 1,
+        ]);
+
+        $response->assertRedirect(route('orders.create'));
+        $response->assertSessionHasErrors('quantity');
+    }
+
+    public function test_register_flow_does_not_allow_admin_role_injection(): void
+    {
+        $response = $this->post(route('register'), [
+            'name' => 'Role Injection',
+            'email' => 'role-injection@example.test',
+            'phone' => '081121212121',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'role' => User::ROLE_ADMIN,
+        ]);
+
+        $response->assertRedirect(route('profile.edit'));
+        $this->assertDatabaseHas('users', [
+            'email' => 'role-injection@example.test',
+            'role' => User::ROLE_CUSTOMER,
+        ]);
+    }
+
+    public function test_customer_is_redirected_away_from_admin_panel(): void
+    {
+        $customer = User::factory()->create([
+            'role' => User::ROLE_CUSTOMER,
+            'phone' => '081313131313',
+        ]);
+
+        $response = $this->actingAs($customer)->get('/admin');
+
+        $response->assertRedirect(route('products.index'));
+    }
 }

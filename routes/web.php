@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (! auth()->check()) {
-        return redirect()->route('login');
+        return view('welcome');
     }
 
     return auth()->user()->isAdmin()
         ? redirect('/admin')
-        : redirect()->route('profile.edit');
+        : redirect()->route('products.index');
 })->name('home');
 
 Route::middleware('guest')->group(function () {

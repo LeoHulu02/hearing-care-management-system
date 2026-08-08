@@ -19,12 +19,17 @@ class CustomersTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Customer')
+                    ->description(fn ($record): string => $record->phone ?: 'No phone number')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('email')
+                    ->icon('heroicon-m-envelope')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('phone')
+                    ->label('Phone')
+                    ->placeholder('Not provided')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->label('Registered At')
@@ -49,6 +54,11 @@ class CustomersTable
                             );
                     }),
             ])
+            ->striped()
+            ->defaultSort('created_at', 'desc')
+            ->emptyStateIcon('heroicon-o-users')
+            ->emptyStateHeading('No customers yet')
+            ->emptyStateDescription('Customers will appear here after registration.')
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),

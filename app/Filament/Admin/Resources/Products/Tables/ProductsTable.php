@@ -17,13 +17,21 @@ class ProductsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable(),
-                ImageColumn::make('image'),
+                    ->label('Product')
+                    ->description(fn ($record): string => $record->description ? str($record->description)->limit(72)->toString() : 'No description provided')
+                    ->searchable()
+                    ->sortable(),
+                ImageColumn::make('image')
+                    ->label('Photo')
+                    ->circular(),
                 TextColumn::make('price')
                     ->money('IDR')
                     ->sortable(),
                 TextColumn::make('stock')
+                    ->label('Stock')
                     ->numeric()
+                    ->badge()
+                    ->color(fn (int $state): string => $state > 0 ? 'success' : 'danger')
                     ->sortable(),
                 TextColumn::make('stock_status')
                     ->label('Availability')
@@ -39,9 +47,11 @@ class ProductsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->striped()
+            ->defaultSort('updated_at', 'desc')
+            ->emptyStateIcon('heroicon-o-cube')
+            ->emptyStateHeading('No products yet')
+            ->emptyStateDescription('Create your first hearing aid product to start accepting customer orders.')
             ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),

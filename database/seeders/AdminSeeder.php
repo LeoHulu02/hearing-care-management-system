@@ -22,5 +22,46 @@ class AdminSeeder extends Seeder
                 'password' => Hash::make('Admin#12345'),
             ]
         );
+
+        User::updateOrCreate(
+            ['email' => 'customer@hearingcare.test'],
+            [
+                'name' => 'Customer Demo',
+                'phone' => '081298765432',
+                'role' => User::ROLE_CUSTOMER,
+                'password' => Hash::make('Customer#12345'),
+            ]
+        );
+
+        // Tambahan akun permanen
+        User::updateOrCreate(
+            ['email' => 'admin2@hearingcare.test'],
+            [
+                'name' => 'Administrator 2',
+                'phone' => '081111111111',
+                'role' => User::ROLE_ADMIN,
+                'password' => Hash::make('Admin#12345'),
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'budi@hearingcare.test'],
+            [
+                'name' => 'Budi Santoso',
+                'phone' => '082222222222',
+                'role' => User::ROLE_CUSTOMER,
+                'password' => Hash::make('Customer#12345'),
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'siti@hearingcare.test'],
+            [
+                'name' => 'Siti Aminah',
+                'phone' => '083333333333',
+                'role' => User::ROLE_CUSTOMER,
+                'password' => Hash::make('Customer#12345'),
+            ]
+        );
     }
 }

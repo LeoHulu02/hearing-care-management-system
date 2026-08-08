@@ -21,7 +21,7 @@ class OrderResource extends Resource
     protected static ?string $modelLabel = 'Order';
     protected static ?string $pluralModelLabel = 'Orders';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
     public static function form(Schema $schema): Schema
     {

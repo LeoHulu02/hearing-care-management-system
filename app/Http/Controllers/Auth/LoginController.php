@@ -34,7 +34,7 @@ class LoginController extends Controller
             return redirect()->intended('/admin');
         }
 
-        return redirect()->intended(route('profile.edit'));
+        return redirect()->intended(route('products.index'));
     }
 
     public function destroy(\Illuminate\Http\Request $request): RedirectResponse

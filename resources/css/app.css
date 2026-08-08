@@ -7,15 +7,19 @@
 @source "../**/*.vue";
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
     --color-hc-primary: #0d9488;
+    --color-hc-primary-dark: #0f766e;
     --color-hc-sidebar: #0f172a;
     --color-hc-bg: #f8fafc;
     --color-hc-card: #ffffff;
+    --color-hc-surface: #f1f5f9;
     --color-hc-border: #e2e8f0;
     --color-hc-text: #0f172a;
-    --color-hc-muted: #64748b;
+    --color-hc-muted: #475569;
+    --color-hc-accent: #0284c7;
     --color-status-pending: #f59e0b;
     --color-status-processing: #2563eb;
     --color-status-completed: #16a34a;
@@ -25,23 +29,126 @@
 @layer base {
     body {
         @apply bg-hc-bg text-hc-text antialiased;
+        background-image:
+            radial-gradient(circle at top left, rgba(13, 148, 136, 0.08), transparent 32rem),
+            radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.06), transparent 28rem);
     }
 }
 
 @layer components {
     .hc-card {
-        @apply rounded-xl border border-hc-border bg-hc-card shadow-sm;
+        @apply rounded-xl border border-hc-border/60 bg-hc-card shadow-sm;
+    }
+
+    .hc-card-elevated {
+        @apply rounded-2xl border border-hc-border/70 bg-white shadow-sm shadow-slate-200/60;
+    }
+
+    .hc-soft-panel {
+        @apply rounded-xl border border-teal-100/80 bg-gradient-to-br from-teal-50 via-white to-slate-50;
     }
 
     .hc-button-primary {
-        @apply rounded-md bg-hc-primary px-4 py-2 font-medium text-white transition hover:brightness-95;
+        @apply rounded-full bg-hc-primary px-4 py-2 text-sm font-medium text-white transition-all hover:bg-hc-primary-dark hover:shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 active:scale-[0.97];
+    }
+
+    .hc-button-secondary {
+        @apply rounded-full border border-hc-border bg-white px-4 py-2 text-sm font-medium text-hc-text transition hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 active:scale-[0.97];
+    }
+
+    .hc-link {
+        @apply font-medium text-hc-primary transition hover:text-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2;
+    }
+
+    .hc-nav-link {
+        @apply rounded-full px-3 py-2 font-medium transition hover:bg-teal-50 hover:text-hc-primary focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2;
+    }
+
+    .hc-section-kicker {
+        @apply inline-flex items-center gap-1.5 rounded-full border border-teal-100 bg-teal-50 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-hc-primary;
+    }
+
+    .hc-input {
+        @apply w-full rounded-lg border border-hc-border bg-white px-3 py-2 text-sm text-hc-text placeholder:text-hc-muted transition focus:border-hc-primary focus:outline-none focus:ring-2 focus:ring-teal-500/20;
+    }
+
+    .hc-label {
+        @apply mb-1.5 block text-sm font-medium text-slate-700;
+    }
+
+    .hc-empty-state {
+        @apply rounded-xl border border-dashed border-hc-border bg-white p-8 text-center text-sm text-hc-muted;
     }
 
     .hc-page-title {
-        @apply text-2xl font-semibold text-hc-text;
+        @apply text-2xl font-bold tracking-tight text-slate-800;
     }
 
     .hc-page-subtitle {
         @apply mt-1 text-sm text-hc-muted;
+    }
+
+    .hc-table {
+        @apply min-w-full divide-y divide-slate-200;
+    }
+
+    .hc-table th {
+        @apply px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500;
+    }
+
+    .hc-table td {
+        @apply px-3 py-2 text-xs;
+    }
+
+    .hc-meta-pill {
+        @apply rounded-full border border-hc-border bg-white px-3 py-1.5 text-xs font-medium text-hc-muted shadow-sm;
+    }
+
+    .hc-breadcrumb {
+        @apply mb-4 flex items-center gap-1.5 text-xs text-hc-muted;
+    }
+
+    .hc-breadcrumb a {
+        @apply text-hc-primary transition hover:text-hc-primary-dark focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded;
+    }
+
+    .hc-breadcrumb-sep {
+        @apply text-hc-muted/60 select-none;
+    }
+
+    .hc-skip-link {
+        @apply sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded-lg focus:bg-hc-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white focus:shadow-lg;
+    }
+
+    .hc-stepper {
+        @apply flex items-center gap-0;
+    }
+
+    .hc-stepper-step {
+        @apply flex flex-1 items-center;
+    }
+
+    .hc-stepper-dot {
+        @apply flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all;
+    }
+
+    .hc-stepper-dot--active {
+        @apply bg-hc-primary text-white shadow-sm shadow-teal-900/20;
+    }
+
+    .hc-stepper-dot--done {
+        @apply bg-emerald-500 text-white;
+    }
+
+    .hc-stepper-dot--pending {
+        @apply border-2 border-hc-border bg-white text-hc-muted;
+    }
+
+    .hc-stepper-line {
+        @apply flex-1 border-t-2 border-hc-border;
+    }
+
+    .hc-stepper-line--done {
+        @apply border-emerald-400;
     }
 }
